@@ -1,0 +1,25 @@
+Services Offered by Nexora Technologies:
+
+1. Web Development:
+We build business websites, portfolio websites, landing pages, dashboards, admin panels, and full-stack web applications.
+
+2. Mobile App Development:
+We build Android and iOS mobile applications with modern UI and backend integration.
+
+3. AI Chatbot Development:
+We build RAG-based AI chatbots that can answer from company data, documents, FAQs, and knowledge bases.
+
+4. Machine Learning Solutions:
+We build ML models, prediction systems, recommendation systems, and data analysis tools.
+
+5. SaaS Development:
+We build SaaS platforms with authentication, role-based access, dashboards, subscriptions, and analytics.
+
+6. Backend API Development:
+We create secure and scalable APIs using FastAPI, Django, and Node.js.
+
+7. Database Design:
+We design databases using PostgreSQL, MongoDB, and SQLite based on project needs.
+
+8. Maintenance and Support:
+We provide bug fixing, feature updates, deployment support, and long-term maintenance.

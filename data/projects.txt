@@ -1,0 +1,25 @@
+Projects by Nexora Technologies:
+
+1. Portfolio Chatbot:
+A chatbot that answers questions from company data and helps website visitors understand services, projects, and contact details.
+Technologies: FastAPI, LangChain, ChromaDB, Mistral AI.
+
+2. AI Customer Support Chatbot:
+A RAG-based chatbot that answers customer questions from PDFs, FAQs, and company documents.
+Technologies: LangChain, Vector Database, AI API, FastAPI.
+
+3. E-commerce Platform:
+A full-stack e-commerce application with product listing, cart, checkout, orders, admin dashboard, and user management.
+Technologies: React, Node.js, MongoDB.
+
+4. AI Voice Receptionist:
+An AI calling assistant that answers customer calls, collects details, books appointments, and sends confirmations.
+Technologies: Twilio, AI API, PostgreSQL.
+
+5. SaaS Appointment Booking System:
+A SaaS platform where businesses can manage appointments, staff, customers, and analytics.
+Technologies: FastAPI, PostgreSQL, React.
+
+6. Resume Analyzer:
+An AI tool that analyzes resumes and gives improvement suggestions.
+Technologies: Python, NLP, AI API.
