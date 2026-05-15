@@ -1,9 +1,10 @@
 import os
 from dotenv import load_dotenv
-import pandas as pd
-
 from datasets import Dataset
+import pandas as pd
+from typing import List, Dict
 
+# Ragas imports (v0.2+ style)
 from ragas import evaluate
 from ragas.metrics import (
     faithfulness,
@@ -12,144 +13,120 @@ from ragas.metrics import (
     context_recall,
 )
 
-from langchain_mistralai import ChatMistralAI, MistralAIEmbeddings
+from langchain_groq import ChatGroq
+from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_chroma import Chroma
 from langchain_core.prompts import ChatPromptTemplate
 
 load_dotenv()
 
+# Configuration
 DB_PATH = os.getenv("CHROMA_DB_PATH", "chroma_db")
 COLLECTION_NAME = os.getenv("COLLECTION_NAME", "portfolio_data")
 
-
-def run_rag(question: str):
-    embeddings = MistralAIEmbeddings(model="mistral-embed")
-
-    vectorstore = Chroma(
-        persist_directory=DB_PATH,
-        embedding_function=embeddings,
-        collection_name=COLLECTION_NAME
-    )
-
-    retriever = vectorstore.as_retriever(
-        search_kwargs={"k": 4}
-    )
-
-    docs = retriever.invoke(question)
-
-    contexts = [doc.page_content for doc in docs]
-    context_text = "\n\n".join(contexts)
-
-    llm = ChatMistralAI(
-        model="mistral-small-latest",
-        temperature=0.2
-    )
-
-    prompt = ChatPromptTemplate.from_messages([
-        (
-            "system",
-            """
-You are Nexora Technologies portfolio chatbot.
-
-Use only the provided company context to answer.
-If answer is not present, say:
-"I could not find this information in the company data."
-"""
-        ),
-        (
-            "human",
-            """
-Company Context:
-{context}
-
-Question:
-{question}
-"""
+class RagasEvaluator:
+    def __init__(self):
+        # Switched to HuggingFace (Local) for embeddings to avoid Mistral API errors
+        print("Loading HuggingFace embeddings (local)...")
+        self.embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
+        
+        # Switched to Groq for LLM (Llama 3.1 8B)
+        self.llm = ChatGroq(
+            model="llama-3.1-8b-instant",
+            temperature=0
         )
-    ])
+        
+        self.vectorstore = Chroma(
+            persist_directory=DB_PATH,
+            embedding_function=self.embeddings,
+            collection_name=COLLECTION_NAME
+        )
+        self.retriever = self.vectorstore.as_retriever(search_kwargs={"k": 4})
 
-    final_prompt = prompt.invoke({
-        "context": context_text,
-        "question": question
-    })
+    def get_rag_response(self, question: str) -> Dict:
+        """Runs the RAG pipeline for a single question."""
+        docs = self.retriever.invoke(question)
+        contexts = [doc.page_content for doc in docs]
+        context_text = "\n\n".join(contexts)
 
-    response = llm.invoke(final_prompt)
+        prompt = ChatPromptTemplate.from_messages([
+            ("system", "You are Nexora Technologies portfolio chatbot. Use only the provided company context to answer. If answer is not present, say: 'I could not find this information in the company data.'"),
+            ("human", "Company Context:\n{context}\n\nQuestion:\n{question}")
+        ])
 
-    return response.content, contexts
+        final_prompt = prompt.invoke({"context": context_text, "question": question})
+        response = self.llm.invoke(final_prompt)
 
+        return {
+            "answer": response.content,
+            "contexts": contexts
+        }
 
-test_data = [
-    {
-        "question": "What services does Nexora Technologies provide?",
-        "ground_truth": "Nexora Technologies provides web development, mobile app development, AI chatbot development, machine learning, SaaS development, backend development, database design, and maintenance support."
-    },
-    {
-        "question": "What are the working hours of Nexora Technologies?",
-        "ground_truth": "Nexora Technologies works Monday to Saturday, 10 AM to 7 PM."
-    },
-    {
-        "question": "Does Nexora Technologies build AI chatbots?",
-        "ground_truth": "Yes, Nexora Technologies builds RAG-based AI chatbots that answer from company data, documents, FAQs, and knowledge bases."
-    },
-    {
-        "question": "What is the contact email of Nexora Technologies?",
-        "ground_truth": "The contact email is contact@nexora.com."
-    }
-]
+    def run_evaluation(self, test_data: List[Dict]):
+        """Runs evaluation on the provided test data."""
+        print(f"Starting evaluation on {len(test_data)} samples using GROQ (llama-3.1-8b-instant)...")
+        
+        questions = []
+        answers = []
+        contexts = []
+        ground_truths = []
 
+        for i, item in enumerate(test_data):
+            print(f"[{i+1}/{len(test_data)}] Processing: {item['question']}")
+            try:
+                res = self.get_rag_response(item["question"])
+                
+                questions.append(item["question"])
+                answers.append(res["answer"])
+                contexts.append(res["contexts"])
+                ground_truths.append(item["ground_truth"])
+            except Exception as e:
+                print(f"Error processing question: {e}")
 
-def main():
-    questions = []
-    answers = []
-    contexts = []
-    ground_truths = []
+        if not questions:
+            print("No questions were processed successfully. Check if your Vector DB exists and is using the same embeddings.")
+            return
 
-    for item in test_data:
-        question = item["question"]
-        ground_truth = item["ground_truth"]
+        dataset = Dataset.from_dict({
+            "question": questions,
+            "answer": answers,
+            "contexts": contexts,
+            "ground_truth": ground_truths
+        })
 
-        answer, retrieved_contexts = run_rag(question)
+        print("Evaluating with Ragas metrics (using GROQ as evaluator)...")
+        result = evaluate(
+            dataset=dataset,
+            metrics=[
+                faithfulness,
+                answer_relevancy,
+                context_precision,
+                context_recall,
+            ],
+            llm=self.llm,
+            embeddings=self.embeddings
+        )
 
-        questions.append(question)
-        answers.append(answer)
-        contexts.append(retrieved_contexts)
-        ground_truths.append(ground_truth)
+        print("\nEvaluation Results:")
+        print(result)
 
-    dataset = Dataset.from_dict({
-        "question": questions,
-        "answer": answers,
-        "contexts": contexts,
-        "ground_truth": ground_truths
-    })
-
-    evaluator_llm = ChatMistralAI(
-        model="mistral-small-latest",
-        temperature=0
-    )
-
-    evaluator_embeddings = MistralAIEmbeddings(
-        model="mistral-embed"
-    )
-
-    result = evaluate(
-        dataset=dataset,
-        metrics=[
-            faithfulness,
-            answer_relevancy,
-            context_precision,
-            context_recall,
-        ],
-        llm=evaluator_llm,
-        embeddings=evaluator_embeddings
-    )
-
-    print(result)
-
-    df = result.to_pandas()
-    df.to_csv("ragas_report.csv", index=False)
-
-    print("Ragas report saved: ragas_report.csv")
-
+        # Save results
+        df = result.to_pandas()
+        output_file = "ragas_report.csv"
+        df.to_csv(output_file, index=False)
+        print(f"\nDetailed report saved to {output_file}")
+        
+        return result
 
 if __name__ == "__main__":
-    main()
+    # Sample test data
+    test_data = [
+        {
+            "question": "What services does Nexora Technologies provide?",
+            "ground_truth": "Nexora Technologies provides web development, mobile app development, AI chatbot development, machine learning, SaaS development, backend development, database design, and maintenance support."
+        },
+        
+    ]
+
+    evaluator = RagasEvaluator()
+    evaluator.run_evaluation(test_data)
