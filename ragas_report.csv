@@ -1,0 +1,25 @@
+user_input,retrieved_contexts,response,reference,faithfulness,answer_relevancy,context_precision,context_recall
+What services does Nexora Technologies provide?,"['Company Name: Nexora Technologies\n\nAbout Us:\nNexora Technologies is a modern IT company that builds websites, mobile apps, AI chatbots, machine learning solutions, and SaaS platforms.\n\nWe help startups, small businesses, and enterprises build scalable and high-performance digital products.\n\nOur Mission:\nTo provide reliable, modern, and affordable technology solutions for businesses.\n\nOur Vision:\nTo become a trusted technology partner for companies that want to grow digitally.\n\nTechnologies We Use:\nPython, FastAPI, Django, Node.js, React, Next.js, MongoDB, PostgreSQL, LangChain, ChromaDB, Mistral AI, AI/ML.\n\nWorking Hours:\nMonday to Saturday, 10 AM to 7 PM.', 'Services Offered by Nexora Technologies:\n\n1. Web Development:\nWe build business websites, portfolio websites, landing pages, dashboards, admin panels, and full-stack web applications.\n\n2. Mobile App Development:\nWe build Android and iOS mobile applications with modern UI and backend integration.\n\n3. AI Chatbot Development:\nWe build RAG-based AI chatbots that can answer from company data, documents, FAQs, and knowledge bases.\n\n4. Machine Learning Solutions:\nWe build ML models, prediction systems, recommendation systems, and data analysis tools.\n\n5. SaaS Development:\nWe build SaaS platforms with authentication, role-based access, dashboards, subscriptions, and analytics.', 'Working Hours:\nMonday to Saturday, 10 AM to 7 PM.\n\nContact:\nEmail: contact@nexora.com\nPhone: +91-9876543210\nLocation: India', 'Projects by Nexora Technologies:\n\n1. Portfolio Chatbot:\nA chatbot that answers questions from company data and helps website visitors understand services, projects, and contact details.\nTechnologies: FastAPI, LangChain, ChromaDB, Mistral AI.\n\n2. AI Customer Support Chatbot:\nA RAG-based chatbot that answers customer questions from PDFs, FAQs, and company documents.\nTechnologies: LangChain, Vector Database, AI API, FastAPI.\n\n3. E-commerce Platform:\nA full-stack e-commerce application with product listing, cart, checkout, orders, admin dashboard, and user management.\nTechnologies: React, Node.js, MongoDB.']","Nexora Technologies provides the following services:
+
+1. Web Development: 
+   - Building business websites
+   - Portfolio websites
+   - Landing pages
+   - Dashboards
+   - Admin panels
+   - Full-stack web applications
+
+2. Mobile App Development: 
+   - Building Android and iOS mobile applications with modern UI and backend integration
+
+3. AI Chatbot Development: 
+   - Building RAG-based AI chatbots that can answer from company data, documents, FAQs, and knowledge bases
+
+4. Machine Learning Solutions: 
+   - Building ML models
+   - Prediction systems
+   - Recommendation systems
+   - Data analysis tools
+
+5. SaaS Development: 
+   - Building SaaS platforms with authentication, role-based access, dashboards, subscriptions, and analytics","Nexora Technologies provides web development, mobile app development, AI chatbot development, machine learning, SaaS development, backend development, database design, and maintenance support.",1.0,0.9999999999997714,0.9166666666361111,1.0
