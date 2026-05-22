@@ -1,4 +1,4 @@
-Projects by Nexora Technologies:
+Projects by ASG Solutions:
 
 1. Portfolio Chatbot:
 A chatbot that answers questions from company data and helps website visitors understand services, projects, and contact details.

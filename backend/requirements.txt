@@ -10,6 +10,7 @@ langchain-text-splitters
 langchain-chroma
 langchain-mistralai
 langchain-groq
+langchain-google-genai
 langchain-huggingface
 langchain-openai
 chromadb
@@ -18,3 +19,5 @@ datasets
 langsmith
 pandas
 tqdm
+streamlit
+requests

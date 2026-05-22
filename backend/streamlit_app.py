@@ -11,7 +11,7 @@ st.set_page_config(
 )
 
 st.title("Portfolio Chatbot")
-st.write("Ask questions about Nexora Technologies")
+st.write("Ask questions about ASG Solutions")
 
 if "session_id" not in st.session_state:
     st.session_state.session_id = str(uuid.uuid4())
