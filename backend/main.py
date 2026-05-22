@@ -1,6 +1,11 @@
+import os
+import sys
 from fastapi import FastAPI, Depends, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
+
+# Ensure the backend directory is in the Python search path for internal imports
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from database import Base, engine, SessionLocal
 from models import ChatHistory
