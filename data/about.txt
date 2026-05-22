@@ -1,7 +1,7 @@
-Company Name: Nexora Technologies
+Company Name: ASG Solutions
 
 About Us:
-Nexora Technologies is a modern IT company that builds websites, mobile apps, AI chatbots, machine learning solutions, and SaaS platforms.
+ASG Solutions is a modern IT company that builds websites, mobile apps, AI chatbots, machine learning solutions, and SaaS platforms.
 
 We help startups, small businesses, and enterprises build scalable and high-performance digital products.
 
@@ -18,6 +18,6 @@ Working Hours:
 Monday to Saturday, 10 AM to 7 PM.
 
 Contact:
-Email: contact@nexora.com
+Email: contact@asgsolutions.com
 Phone: +91-9876543210
 Location: India
